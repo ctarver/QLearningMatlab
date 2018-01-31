@@ -34,7 +34,7 @@ classdef QLearning
          %      element of the Q table and closer to 1 replaces the old value
          %      of an element with a new one.
          
-         
+         clc;close all;
          if nargin == 0
             obj.learningRate = 0.5;
             obj.markovDecisionProcess.nStates = 5;

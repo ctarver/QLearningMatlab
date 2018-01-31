@@ -16,7 +16,7 @@ classdef QLearning
    
    methods
       function obj = QLearning(markovDecisionProcess, gamma, RMatrix, ...
-            initialState, learningRate)
+            learningRate)
          %QLEARNING Construct an instance of this class
          %   Detailed explanation goes here
          

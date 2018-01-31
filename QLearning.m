@@ -13,6 +13,8 @@ classdef QLearning
       gamma
       currentState
       learningRate
+      desirableState
+      undesirableState
    end
    
    methods
@@ -23,18 +25,25 @@ classdef QLearning
          
          learningRate = 0.5;
          if nargin == 0
-            obj.nStates = 4;
-            obj.nActions = 4;
-            obj.gamma = 0.8;
+            obj.nStates = 5;
+            obj.nActions = 2;
+            obj.gamma = 0.5;
+            
             obj.RMatrix = zeros(obj.nStates, obj.nActions);
-            for i = 1:obj.nStates
-               %Give a random action a positive reward
-               obj.RMatrix(i,randi(obj.nActions)) = randi(100);
-            end
-            obj.RMatrix
             obj.currentState = randi(obj.nStates);
             obj.environment = randi([1 obj.nStates], obj.nStates,  ...
                obj.nActions);
+            stateWithoutRewards = randi(obj.nStates);
+            obj.RMatrix(stateWithoutRewards,:) = 0;
+            undesirableState = randi(obj.nStates);
+            obj.undesirableState = undesirableState;
+            obj.RMatrix(obj.environment==undesirableState) = -100;
+            desirableState = randi(obj.nStates);
+            while desirableState == undesirableState
+               desirableState = randi(obj.nStates);
+            end
+            obj.desirableState = desirableState;
+            obj.RMatrix(obj.environment==desirableState) = 100;
          else
             obj.nStates = nStates;
             obj.nActions = nActions;
@@ -44,28 +53,36 @@ classdef QLearning
             obj.environment = environment;
          end
          
-         obj.environment
-         obj.RMatrix
-         obj.currentState
-         
          obj.QMatrix = zeros(obj.nStates, obj.nActions);
-         
-         for i = 1:100
+         nIterations = 500;
+         arrayForm = zeros(length(obj.QMatrix(:)),nIterations);
+         stateArray = zeros(1,nIterations);
+         explorationRate = 50;
+         for i = 1:nIterations
             %Choose an action.
-            action = randi(obj.nActions);
+            [~, nextAction] = max(obj.QMatrix(obj.currentState,:));
+            if randi(100) > explorationRate
+               nextAction = randi(obj.nActions);
+            end
             %Get next state
-            nextState = obj.environment(obj.currentState,action);
+            nextState = obj.environment(obj.currentState,nextAction);
             
             %Update Q Matrix
-            obj.QMatrix(obj.currentState, action) = ...
-               obj.RMatrix(obj.currentState,action) + ...
-               obj.gamma * max(obj.QMatrix(nextState,:));
-            
+            obj.QMatrix(obj.currentState, nextAction) = ...
+               (1-learningRate)*...
+               obj.QMatrix(obj.currentState, nextAction) + ...
+               learningRate*(obj.RMatrix(obj.currentState,nextAction) + ...
+               obj.gamma * max(obj.QMatrix(nextState,:)));
+            arrayForm(:,i) = obj.QMatrix(:);
+            stateArray(i) = nextState;
             %Update current state
             obj.currentState = nextState;
          end
-         
-         
+         figure
+         plot(arrayForm');
+         figure
+         plot(stateArray);
+         obj
       end
       
       function outputArg = method1(obj,inputArg)

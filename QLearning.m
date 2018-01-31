@@ -18,7 +18,22 @@ classdef QLearning
       function obj = QLearning(markovDecisionProcess, gamma, RMatrix, ...
             learningRate)
          %QLEARNING Construct an instance of this class
-         %   Detailed explanation goes here
+         %
+         % Syntax: learningObj = QLearning(markovDecisionProcess, gamma,
+         %                           RMatrix, learningRate);
+         % 
+         % Inputs:
+         %    markovDecisionProcess: strut with nStates, nActions, and
+         %      environment defining the transitions for each state/action
+         %    gamma: discount factor [0,1] where closer to 0 prioritizes
+         %      immeadiate reward and closer to 1 prioritizes future rewards
+         %    RMatrix: matrix of the rewards given for taking an action 
+         %      at a state
+         %    learningRate: [0,1] where closer to 0 makes smaller changes
+         %      averaging the new calculation with the previous value for an
+         %      element of the Q table and closer to 1 replaces the old value
+         %      of an element with a new one.
+         
          
          if nargin == 0
             obj.learningRate = 0.5;

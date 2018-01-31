@@ -9,7 +9,6 @@ classdef QLearning
       QMatrix
       RMatrix
       gamma
-      currentState
       learningRate
       desirableState
       undesirableState
@@ -29,7 +28,6 @@ classdef QLearning
             
             obj.RMatrix = zeros(obj.markovDecisionProcess.nStates, ...
                obj.markovDecisionProcess.nActions);
-            obj.currentState = randi(obj.markovDecisionProcess.nStates);
             obj.markovDecisionProcess.environment = randi([1 ...
                obj.markovDecisionProcess.nStates], ...
                obj.markovDecisionProcess.nStates,  ...
@@ -54,7 +52,6 @@ classdef QLearning
                markovDecisionProcess.nActions;
             obj.gamma = gamma;
             obj.RMatrix = RMatrix;
-            obj.currentState = initialState;
             obj.learningRate = learningRate;
          end
          
@@ -85,6 +82,7 @@ classdef QLearning
          if nargin == 1
             nIterations = 500;
             explorationRate = 50;
+            currentState = randi(obj.markovDecisionProcess.nStates);
          end
          
          % Set up variables for analysis
@@ -98,21 +96,24 @@ classdef QLearning
             if randi(100) > explorationRate
                nextAction = randi(obj.markovDecisionProcess.nActions);
             else
-               [~, nextAction] = max(obj.QMatrix(obj.currentState,:));
+               [~, nextAction] = max(obj.QMatrix(currentState,:));
             end
             % Lookup next state for the current state and choosen action
-            nextState = obj.markovDecisionProcess.environment(obj.currentState,nextAction);
+            nextState = obj.markovDecisionProcess.environment(currentState,nextAction);
             
-            %Update Q Matrix
-            obj.QMatrix(obj.currentState, nextAction) = ...
+            % Update Q Matrix
+            obj.QMatrix(currentState, nextAction) = ...
                (1-obj.learningRate)*...
-               obj.QMatrix(obj.currentState, nextAction) + ...
-               obj.learningRate*(obj.RMatrix(obj.currentState,nextAction) + ...
+               obj.QMatrix(currentState, nextAction) + ...
+               obj.learningRate*(obj.RMatrix(currentState,nextAction) + ...
                obj.gamma * max(obj.QMatrix(nextState,:)));
+            
+            % Record Statistics
             arrayForm(:,i) = obj.QMatrix(:);
             stateArray(i) = nextState;
-            %Update current state
-            obj.currentState = nextState;
+            
+            % Update current state
+            currentState = nextState;
          end
          
          %Figures

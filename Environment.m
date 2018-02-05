@@ -3,6 +3,7 @@ classdef Environment
    %interface with.
    %   
    % TODO:
+   % - Guarantee a fully connected environment
    % - Make it so that I an action isn't completely deterministic in
    %   where it sends the agents. 
    

@@ -27,7 +27,7 @@ classdef QLearningAgent
          %      element of the Q table and closer to 1 replaces the old value
          %      of an element with a new one.
          %    nStates: number of states in the environment
-         %    nActions: number of possible actions to take
+         %    nActions: numbe
          
          clc;close all;
          

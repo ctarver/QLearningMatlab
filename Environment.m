@@ -1,7 +1,10 @@
 classdef Environment
    %Environment Class that is a space/action/reward space for an actor to
    %interface with.
-   %   Detailed explanation goes here
+   %   
+   % TODO:
+   % - Make it so that I an action isn't completely deterministic in
+   %   where it sends the agents. 
    
    properties
       nStates
@@ -16,7 +19,8 @@ classdef Environment
    methods
       function obj = Environment(nStates,nActions)
          %Environment Construct an instance of this class
-         %   Detailed explanation goes here
+         %   just radomly connect the states and actions.
+         
          if nargin == 0
             obj.nStates = 5;
             obj.nActions = 2;

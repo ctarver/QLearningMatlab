@@ -1,0 +1,20 @@
+clear;clc;close all;
+
+% Create a random environment
+env = Environment;
+
+% Create a Q-LearningAgent
+agent = QLearningAgent;
+
+%% Perform Q-Learning
+nIterations = 500;
+
+% Set up variables for analysis
+arrayForm = zeros(length(agent.QMatrix(:)),nIterations);
+stateArray = zeros(1,nIterations);
+
+
+for i = 1:nIterations
+   action = agent.chooseAction(get);
+   
+end

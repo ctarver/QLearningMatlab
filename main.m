@@ -6,7 +6,7 @@ env = Environment;
 % Create a Q-LearningAgent
 agent = QLearningAgent;
 
-disp("Environment:   Rewards:"); 
+disp('Environment:   Rewards:'); 
 disp([env.transitionMatrix,  env.rewardMatrix])
 
 disp(['Desired State:', num2str(env.desirableState), ...
@@ -33,11 +33,10 @@ for i = 1:nIterations
    arrayForm(:,i) = agent.QMatrix(:);
    stateArray(i) = nextState;
 end
-disp("Final Q-Table:");
+disp(' ');
+disp('Final Q-Table:');
 disp(agent.QMatrix);
 
 %Figures
 figure
 plot(arrayForm');
-figure
-plot(stateArray);
